@@ -10,20 +10,45 @@
 <style>
 :root {
   --pink: #ff5c8a;
-  --soft-pink: #ffe4ec;
   --yellow: #fff3b0;
+  --soft-pink: #ffe4ec;
+  --heart-shadow: rgba(255, 92, 138, 0.45);
 }
 
+/* BASIC STYLES */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #fff9c4, #fce4ec);
+  background: radial-gradient(circle at top, #fff3b0 0%, #fce4ec 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+/* FLOATING BACKGROUND */
+.bg-float {
+  position: fixed;
+  font-size: 2rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(110vh) rotate(0deg); }
+  100% { transform: translateY(-20vh) rotate(360deg); }
+}
+
+/* HEART TRAIL */
+.trail {
+  position: fixed;
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: trailFade 1s forwards;
+}
+@keyframes trailFade {
+  to { opacity: 0; transform: translateY(-20px) scale(0.6) rotate(20deg); }
 }
 
 /* OVERLAY */
@@ -38,141 +63,172 @@ body {
   z-index: 9999;
   cursor: pointer;
   text-align: center;
+  transition: background 0.5s ease;
 }
+#overlay:hover { background: #fff1a8; }
 
 #overlay .animals {
-  font-size: 4rem;
-  margin-bottom: 10px;
+  font-size: 5rem;
+  animation: bounce 1.5s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
 #overlay h1 {
   font-family: 'Dancing Script', cursive;
-  font-size: 3.2rem;
+  font-size: 3.5rem;
   color: var(--pink);
+  text-shadow: 2px 2px var(--heart-shadow);
+  margin-top: 15px;
 }
-
 #overlay p {
   margin-top: 10px;
   font-weight: 600;
-  color: #444;
+  font-size: 1.2rem;
 }
 
 /* CARD */
 .card {
   background: white;
   padding: 3rem 2rem;
-  border-radius: 40px;
+  border-radius: 50px;
   text-align: center;
-  box-shadow: 0 25px 70px rgba(255, 92, 138, 0.25);
+  box-shadow: 0 25px 70px var(--heart-shadow);
   width: 90%;
   max-width: 400px;
-  min-height: 440px;
+  min-height: 460px;
   position: relative;
   display: none;
+  animation: popIn 0.6s ease forwards;
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+.card:hover { transform: scale(1.05); }
+
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .card h1 {
   font-family: 'Dancing Script', cursive;
-  font-size: 2.7rem;
+  font-size: 3rem;
   color: var(--pink);
+  margin: 15px 0;
 }
+.card p { color: #999; font-size: 0.95rem; margin-bottom: 30px; }
 
-.yes-box {
-  margin-top: 60px;
-}
-
+/* YES BUTTON */
+.yes-box { margin-top: 50px; }
 .btn-yes {
-  background: var(--pink);
+  background: linear-gradient(45deg, #ff5c8a, #ff85b3);
   color: white;
-  padding: 15px 50px;
-  font-size: 1.4rem;
+  padding: 15px 60px;
+  font-size: 1.5rem;
   font-weight: 700;
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 92, 138, 0.45);
+  box-shadow: 0 15px 35px var(--heart-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-yes:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px var(--heart-shadow);
 }
 
-/* Sad message */
-#sadZone {
-  margin-top: 15px;
-  min-height: 28px;
-}
-
+/* SAD MESSAGE */
+#sadZone { margin-top: 15px; min-height: 28px; }
 .sad-text {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #ff6f91;
   background: linear-gradient(135deg, #fff3f7, #ffe4ec);
-  padding: 6px 16px;
-  border-radius: 20px;
+  padding: 6px 18px;
+  border-radius: 25px;
   display: inline-block;
-  box-shadow: 0 6px 18px rgba(255, 92, 138, 0.25);
   animation: fadeUp 0.4s ease;
 }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* NO BUTTON (SCREEN ONLY) */
+/* NO BUTTON */
 #noBtn {
   position: fixed;
   background: #fff3f7;
   color: #ff6f91;
   border: 2px dashed #ffb6c1;
-  padding: 8px 22px;
-  font-size: 1rem;
-  border-radius: 40px;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  border-radius: 50px;
   cursor: pointer;
   z-index: 50;
   display: none;
+  transition: all 0.2s ease;
 }
+#noBtn:hover { transform: scale(1.1); }
 
 /* CELEBRATION */
 #celebration {
   position: fixed;
   inset: 0;
-  background: var(--yellow);
+  background: radial-gradient(circle at top, #fff9c4 0%, #ffe066 100%);
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10000;
   text-align: center;
+  animation: fadeIn 0.8s ease forwards;
+  overflow: hidden;
 }
 
-#celebration h1 {
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+
+.celebrate-title {
   font-family: 'Dancing Script', cursive;
-  font-size: 4rem;
-  color: var(--pink);
+  font-size: 4.5rem;
+  color: #ff5c8a;
+  text-shadow: 2px 2px rgba(255, 92, 138, 0.5);
+  animation: bounceText 1.2s infinite;
 }
 
-#celebration p {
-  font-size: 1.6rem;
-  margin-top: 15px;
-  color: #444;
-}
-
-#celebration .love {
-  font-size: 2.4rem;
+.celebrate-subtitle {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: #ffa500;
   margin-top: 10px;
-  font-family: 'Dancing Script', cursive;
-  color: var(--pink);
+  animation: sparkle 2s infinite alternate;
 }
 
-#celebration .animals {
-  font-size: 4rem;
+.love {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
   margin-top: 20px;
+  color: #444;
+  text-shadow: 1px 1px #ffdf80;
+  animation: heartbeat 1.5s infinite;
 }
+
+.animals {
+  font-size: 5rem;
+  margin-top: 25px;
+  animation: floatEmojis 2s infinite alternate;
+}
+
+/* Animations */
+@keyframes bounceText { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
+@keyframes heartbeat { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+@keyframes floatEmojis { 0%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-10px) rotate(15deg);} 100%{transform:translateY(0) rotate(-15deg);} }
+@keyframes sparkle { 0%{color:#ffa500;text-shadow:0 0 5px #fff3b0;} 50%{color:#ffd633;text-shadow:0 0 20px #fff3b0;} 100%{color:#ffa500;text-shadow:0 0 5px #fff3b0;} }
 </style>
 </head>
 
-<body onclick="startApp()">
+<body>
 
 <!-- OVERLAY -->
-<div id="overlay">
+<div id="overlay" onclick="startApp()">
   <div class="animals">🐶🐱🐾💛</div>
   <h1>A Gift for You</h1>
   <p>Tap to open this little surprise 🎁</p>
@@ -180,23 +236,21 @@ body {
 
 <!-- CARD -->
 <div class="card" id="card">
-  <div style="font-size:2.5rem;">🐶🐱</div>
+  <div style="font-size:3rem;">🐶🐱</div>
   <h1>Will you be my Valentine?</h1>
-  <p style="color:#999;font-size:0.9rem;">"Look at the stars, look how they shine for you..." ✨</p>
-
+  <p>"Look at the stars, look how they shine for you..." ✨</p>
   <div class="yes-box">
     <button class="btn-yes" onclick="celebrate()">YES! 💖</button>
     <div id="sadZone"></div>
   </div>
 </div>
 
-<!-- NO BUTTON -->
 <button id="noBtn">No 🙈</button>
 
 <!-- CELEBRATION -->
 <div id="celebration">
-  <h1>YAY!!! 🎉💕</h1>
-  <p>It’s all yellow now 🌟</p>
+  <h1 class="celebrate-title">YAY!!! 🎉💕</h1>
+  <p class="celebrate-subtitle">It’s all yellow now 🌟</p>
   <div class="love">I love you forever and always ❤️</div>
   <div class="animals">🐶🐱🐾💛✨</div>
 </div>
@@ -211,51 +265,76 @@ const sadMessages = [
 ];
 
 const card = document.getElementById('card');
+const overlay = document.getElementById('overlay');
 const noBtn = document.getElementById('noBtn');
 
+/* START APP */
 function startApp() {
-  if (overlay.style.display === 'none') return;
   overlay.style.display = 'none';
   card.style.display = 'block';
   noBtn.style.display = 'block';
   moveNo();
+  spawnBackground();
 }
 
+/* NO BUTTON LOGIC */
 function moveNo() {
-  const cardRect = card.getBoundingClientRect();
+  const r = card.getBoundingClientRect();
   let x, y;
-
   do {
     x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
     y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-  } while (
-    x > cardRect.left - noBtn.offsetWidth &&
-    x < cardRect.right &&
-    y > cardRect.top - noBtn.offsetHeight &&
-    y < cardRect.bottom
-  );
-
+  } while (x > r.left && x < r.right && y > r.top && y < r.bottom);
   noBtn.style.left = x + 'px';
   noBtn.style.top = y + 'px';
-
-  showSadMessage();
-}
-
-function showSadMessage() {
-  const sadZone = document.getElementById('sadZone');
-  sadZone.innerHTML = '';
-  const msg = document.createElement('div');
-  msg.className = 'sad-text';
-  msg.textContent = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-  sadZone.appendChild(msg);
-  setTimeout(() => msg.remove(), 2000);
+  showSad();
 }
 
 noBtn.addEventListener('mouseover', moveNo);
 noBtn.addEventListener('touchstart', e => { e.preventDefault(); moveNo(); });
 
+/* SAD MESSAGE */
+function showSad() {
+  const z = document.getElementById('sadZone');
+  z.innerHTML = '';
+  const m = document.createElement('div');
+  m.className = 'sad-text';
+  m.textContent = sadMessages[Math.floor(Math.random()*sadMessages.length)];
+  z.appendChild(m);
+  setTimeout(()=>m.remove(),2000);
+}
+
+/* CELEBRATE */
 function celebrate() {
   document.getElementById('celebration').style.display = 'flex';
+}
+
+/* BACKGROUND FLOAT */
+function spawnBackground() {
+  const icons = ['💛','🐾','✨','🐶','🐱'];
+  setInterval(() => {
+    const e = document.createElement('div');
+    e.className = 'bg-float';
+    e.textContent = icons[Math.floor(Math.random()*icons.length)];
+    e.style.left = Math.random()*100+'vw';
+    e.style.animationDuration = (8+Math.random()*6)+'s';
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),15000);
+  }, 800);
+}
+
+/* HEART TRAIL */
+document.addEventListener('mousemove', trail);
+document.addEventListener('touchmove', e => trail(e.touches[0]));
+
+function trail(e) {
+  const t = document.createElement('div');
+  t.className = 'trail';
+  t.textContent = '💛';
+  t.style.left = e.clientX + 'px';
+  t.style.top = e.clientY + 'px';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1000);
 }
 </script>
 
